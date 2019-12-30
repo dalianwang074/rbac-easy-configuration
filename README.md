@@ -13,7 +13,7 @@
 zhangsan 123456
 
 - step2
-访问权限接口
+访问权限接口  http://localhost:60203/listPermission
 
 
 ```
@@ -22,6 +22,7 @@ zhangsan 123456
     @GetMapping("/listPermission")
     public String listPermission()
     ```
+
     返回异常：
     {
     "timestamp": 1577694727366,
@@ -34,7 +35,8 @@ zhangsan 123456
 
 理想结果，因为我们使用了UserLoginToken 注解，需要登录，获取token之后，再进行访问。
 
-- step3 登录，获取token
+- step3 登录，获取token  http://localhost:60203/login
+
 ```
 @PostMapping("/login")
 ```
@@ -48,3 +50,5 @@ zhangsan 123456
     },
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MDQ6MTU3NzY5NDk5OTI3OCJ9.vj9fcTJiWvHOMTHXu61oicwcA-s5MwW-t5Mo34lkgNc"
 }
+
+
