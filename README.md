@@ -38,14 +38,9 @@ public String login(@RequestBody User user)
 ```
 
 获取token 
-{
-    "user": {
-        "id": 504,
-        "password": "E10ADC3949BA59ABBE56E057F20F883E",
-        "username": "zhangsan"
-    },
-    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MDQ6MTU3NzY5NDk5OTI3OCJ9.vj9fcTJiWvHOMTHXu61oicwcA-s5MwW-t5Mo34lkgNc"
-}
+
+"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MDQ6MTU3NzY5NDk5OTI3OCJ9.vj9fcTJiWvHOMTHXu61oicwcA-s5MwW-t5Mo34lkgNc"
+
 
 
 ## step4 再次访问权限接口 ，在header中放入返回的token
@@ -54,14 +49,9 @@ token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MDQ6MTU3NzY5NDk5OTI3OCJ9.
 
 报如下异常
 
-{
-    "timestamp": 1577695461561,
-    "status": 500,
-    "error": "Internal Server Error",
-    "exception": "java.lang.RuntimeException",
-    "message": "用户不具备访问当前接口权限！",
-    "path": "/listPermission"
-}
+
+"message": "用户不具备访问当前接口权限！",
+
 
 OK，携带token之后，异常发生了变化，用户不具备访问当前接口权限！ 这正式我们想要返回的结果。 我们需要为用户zhangsan赋予相应的角色。
 
@@ -71,16 +61,7 @@ OK，携带token之后，异常发生了变化，用户不具备访问当前接�
 http://localhost:60203/addUserRole?roleId=2&userId=504
 
 
-```java
-@UserLoginToken
-    @GetMapping()
-    public String addUserRole(long userId,long roleId){
-        userRoleService.addUserRole(userId,roleId);
-        return "success";
-    }
-    ```
-    
-    此时，我们的数据库里user_role表中，就会有这条用户角色相关联数据。
+此时，我们的数据库里user_role表中，就会有这条用户角色相关联数据。
     
     
     
@@ -95,7 +76,7 @@ http://localhost:60203/addUserRole?roleId=2&userId=504
  
  返回
  
- ```json
+```json
  [
     {
         "annotionId": "list_permission",
@@ -117,7 +98,8 @@ http://localhost:60203/addUserRole?roleId=2&userId=504
         "annotionNote": "添加角色权限数据",
         "id": 11
     }
-]```
+]
+```
 
 success!!!
 
