@@ -38,7 +38,7 @@ public class RoleController {
     }
 
     @UserLoginToken
-    @Authentication(id="add_user_role",note="添加用户角色数据")
+//    @Authentication(id="add_user_role",note="添加用户角色数据")
     @GetMapping("/addUserRole")
     public String addUserRole(long userId,long roleId){
         userRoleService.addUserRole(userId,roleId);
