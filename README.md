@@ -6,11 +6,13 @@
 
 @Authentication  注解，用于权限管理拦截
 
-项目使用示例
+程序会自动扫描controller下的这两个注解。当有web请求时，通过此注解判断相应当权限。
+
+
 
 ## step1
 新增用户
-zhangsan 123456
+zhangsan 123456 数据库直接添加就好了。
 
 ## step2
 访问权限接口  http://localhost:60203/listPermission
