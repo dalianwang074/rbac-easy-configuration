@@ -90,11 +90,11 @@ public class UserService {
      * 及格
      *
      * 服务器上的数据库
-     * 单条插入，耗时也需要 1.5 m 秒
-     * 换成批量插入，耗时也需要 1.3 m 秒
+     * 单条插入，耗时也需要 1.5 s 秒
+     * 换成批量插入，耗时也需要 1.3 s 秒
      */
     @Transactional
-    public void testAddUsers2(){
+    public void testAddUsers1(){
         LocalTime time1 = LocalTime.now();
 
         List<User> list = new ArrayList<>();
@@ -119,9 +119,13 @@ public class UserService {
      * 最总结果均在1.3秒左右，与单条插入相差无几。
      *
      * 足以证明，jpa不需要批量插入.
+     *
+     * 刚刚又对比mybatis测试了一下。
+     * mybatis单条插入需要2.3s
+     * 但批量插入仅仅需要90ms。  mygod！
      */
     @Transactional
-    public void testAddUsers(){
+    public void testAddUsers2(){
         LocalTime time1 = LocalTime.now();
 
         List<User> list = new ArrayList<>();
@@ -134,6 +138,29 @@ public class UserService {
         }
         entityManager.flush();
         entityManager.clear();
+
+        LocalTime time2 = LocalTime.now();
+        System.out.println(time1);
+        System.out.println(time2);
+    }
+
+    /**
+     * 幸好hibernate支持原生sql插入方式。
+     * 通过拼接数据sql实现批量插入，最终只耗时30毫秒！！！
+     */
+    @Transactional
+    public void testAddUsers(){
+        LocalTime time1 = LocalTime.now();
+
+        StringBuilder sb = new StringBuilder(500);
+
+        sb.append("insert into user (username,password) values ");
+        sb.append("('un1','pw1')");
+        for(int i = 1;i<500;i++){
+            sb.append(",('un1','pw1')");
+        }
+
+        entityManager.createNativeQuery(sb.toString()).executeUpdate();
 
         LocalTime time2 = LocalTime.now();
         System.out.println(time1);
