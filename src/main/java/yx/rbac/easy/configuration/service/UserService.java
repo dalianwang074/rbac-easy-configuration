@@ -11,6 +11,8 @@ import yx.rbac.easy.configuration.dao.UserDao;
 import yx.rbac.easy.configuration.entity.User;
 import yx.rbac.easy.configuration.util.MD5Util;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,9 @@ import java.util.Set;
 
 @Service
 public class UserService {
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Autowired
     TokenService tokenService;
@@ -85,10 +90,11 @@ public class UserService {
      * 及格
      *
      * 服务器上的数据库
+     * 单条插入，耗时也需要 1.5 m 秒
      * 换成批量插入，耗时也需要 1.3 m 秒
      */
     @Transactional
-    public void testAddUsers(){
+    public void testAddUsers2(){
         LocalTime time1 = LocalTime.now();
 
         List<User> list = new ArrayList<>();
@@ -101,6 +107,33 @@ public class UserService {
         }
 
         userDao.save(list);
+
+        LocalTime time2 = LocalTime.now();
+        System.out.println(time1);
+        System.out.println(time2);
+    }
+
+    /**
+     * 设置配置文件 batch_versioned_data: true
+     * 使用entityManager方式，
+     * 最总结果均在1.3秒左右，与单条插入相差无几。
+     *
+     * 足以证明，jpa不需要批量插入.
+     */
+    @Transactional
+    public void testAddUsers(){
+        LocalTime time1 = LocalTime.now();
+
+        List<User> list = new ArrayList<>();
+        for(int i=0;i<500;i++){
+            User user = new User();
+            user.setUsername("g");
+            user.setPassword("123456");
+            list.add(user);
+            entityManager.persist(user);
+        }
+        entityManager.flush();
+        entityManager.clear();
 
         LocalTime time2 = LocalTime.now();
         System.out.println(time1);
