@@ -12,6 +12,8 @@ import yx.rbac.easy.configuration.entity.User;
 import yx.rbac.easy.configuration.util.MD5Util;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -81,18 +83,28 @@ public class UserService {
      * 13:34:38.126
      * 500条数据，共耗时  502 毫秒
      * 及格
+     *
+     * 服务器上的数据库
+     * 换成批量插入，耗时也需要 1.3 m 秒
      */
     @Transactional
     public void testAddUsers(){
-        System.out.println(LocalTime.now());
+        LocalTime time1 = LocalTime.now();
+
+        List<User> list = new ArrayList<>();
         for(int i=0;i<500;i++){
             User user = new User();
             user.setUsername("g");
             user.setPassword("123456");
-            userDao.save(user);
+//            userDao.save(user);
+            list.add(user);
         }
-        System.out.println(LocalTime.now());
 
+        userDao.save(list);
+
+        LocalTime time2 = LocalTime.now();
+        System.out.println(time1);
+        System.out.println(time2);
     }
 
 }
